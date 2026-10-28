@@ -1,0 +1,239 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mirage</title>
+<link rel="icon" type="image/png" sizes="64x64" href="./favicon.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="stylesheet" href="./assets/mirage-e21914f8.css">
+<link rel="modulepreload" href="./assets/three-d12762e1.js">
+<script type="module" src="./assets/mirage-d415a41c.js"></script>
+<meta name="description" content="Raise a desert camp into a city that never ends. Mirage is a calm city builder by Unethical Studios that runs in your browser.">
+<meta name="copyright" content="© 2026 Unethical Group. All rights reserved.">
+<meta name="robots" content="index, follow, noai, noimageai">
+<meta name="theme-color" content="#E6DCC8">
+<link rel="canonical" href="https://miragegame.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Mirage">
+<meta property="og:title" content="Mirage">
+<meta property="og:description" content="Raise a desert camp into a city that never ends. A calm city builder by Unethical Studios.">
+<meta property="og:url" content="https://miragegame.io/">
+<meta property="og:image" content="https://5nqwjv5ns6.github.io/mirage/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Mirage, at dawn over the desert">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://5nqwjv5ns6.github.io/mirage/og.jpg">
+<div id="intro" aria-hidden="true"><canvas id="introSky"></canvas><canvas id="introCv"></canvas></div>
+<canvas id="gl" aria-label="The city. In build mode, drag to lay roads; tap the map to look around."></canvas>
+<canvas id="ov" aria-hidden="true"></canvas>
+<header class="hud tl" id="hudL">
+<div class="pill clock"><canvas id="dial" width="72" height="72" aria-hidden="true"></canvas><div class="when"><div class="era" id="eraName">Encampment</div><div class="day" id="day">Week 1 · Mon</div></div></div>
+</header>
+<aside class="hud tr" id="hudR">
+<div class="stats" id="stats">
+<div class="pill stat" id="coinStat" title="Treasury: sales pay for the upkeep due every dawn">
+<span class="coin" aria-hidden="true"></span><div class="col"><span class="num" id="coins">40</span><span class="sub" id="upk">−2 at dawn</span></div>
+</div>
+<div class="pill stat" id="popStat" title="Population">
+<svg class="person" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="4" fill="currentColor"/><path d="M4 21c0-4.6 3.6-7.6 8-7.6s8 3 8 7.6z" fill="currentColor"/></svg>
+<div class="col"><span class="num" id="pop">10</span><div class="goal" aria-hidden="true"><i id="goalFill"></i></div></div>
+</div>
+</div>
+<div class="pill ctrls" id="ctrls">
+<button class="cb" id="bMenu" aria-label="Menu" title="Menu (saves your city)"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12M4 10h12M4 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+<button class="cb" id="bPause" aria-label="Pause" title="Pause (Space)"><svg viewBox="0 0 20 20" aria-hidden="true" id="iPause"><rect x="5" y="4" width="3.4" height="12" rx="1.2" fill="currentColor"/><rect x="11.6" y="4" width="3.4" height="12" rx="1.2" fill="currentColor"/></svg></button>
+<button class="cb" id="bSpeed" aria-label="Double speed" title="Double speed (2)"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5l6 5-6 5zM10.5 5l6 5-6 5z" fill="currentColor"/></svg></button>
+<button class="cb" id="bSound" aria-label="Sound on" title="Sound"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5h3l4.2-3.5v12L6 12.5H3z" fill="currentColor"/><path id="iWave" d="M13 7c1.2 1.6 1.2 4.4 0 6M15.3 5c2.2 2.8 2.2 7.2 0 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+<button class="cb" id="bWorld" aria-label="World" title="World: era, time of day, growth" aria-expanded="false" aria-controls="pWorld"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.6 10h12.8M10 3.4c2.6 2.7 2.6 10.5 0 13.2M10 3.4c-2.6 2.7-2.6 10.5 0 13.2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+<button class="cb" id="bFlow" aria-label="Traffic flow" aria-pressed="false" title="Traffic flow: roads coloured from flowing to stalled (H)"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 15c3-0 4-10 7-10s4 10 7 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="5" r="1.6" fill="currentColor"/></svg></button>
+<button class="cb" id="bShow" aria-label="Showcase" title="Showcase: a tour of your city (V)"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 10c2-3.6 4.6-5.4 7.5-5.4s5.5 1.8 7.5 5.4c-2 3.6-4.6 5.4-7.5 5.4S4.5 13.6 2.5 10z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="10" cy="10" r="2.6" fill="currentColor"/></svg></button>
+<button class="cb build" id="bBuild" hidden aria-label="Build" title="Build (R)"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M6 22c0-6 6-5 8-8s1-6 8-8" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></button>
+</div>
+<div class="warn" id="warn" hidden></div>
+<div class="pill evpill" id="evPill" hidden><canvas id="evRing" width="56" height="56" aria-hidden="true"></canvas><div class="col"><b id="evName"></b><span class="sub" id="evWhen"></span></div></div>
+</aside>
+<div class="paused" id="pausedTag" hidden>Paused</div>
+<nav class="pill tray" id="tray" aria-label="Build tools">
+<button class="tb active" id="tRoad" title="Roads (R)"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M6 22c0-6 6-5 8-8s1-6 8-8" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round"/></svg><b class="badge" id="nRoad">30</b></button>
+<button class="tb" id="tBridge" title="Bridge passes: drag a road from the bank over the water"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M3 11h22" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/><path d="M6.5 11v9M21.5 11v9M6.5 20c2-6.5 13-6.5 15 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><b class="badge" id="nBridge">1</b></button>
+<button class="tb" id="tRamp" title="Ramps: hold Shift and drag a road straight up (or down) a plateau's edge" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M3 22h7l9-9h6" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 13v9M25 13v9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><b class="badge" id="nRamp">0</b></button>
+<button class="tb" id="tTunnel" title="Tunnels: drag a road straight at the rock and on through it" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M3 22h22" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M6 22v-7a8 8 0 0 1 16 0v7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M10.5 22v-6a3.5 3.5 0 0 1 7 0v6" fill="currentColor"/></svg><b class="badge" id="nTunnel">0</b></button>
+<button class="tb" id="tDepot" title="Place a stable or garage" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4.5" y="7" width="19" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M4.5 12h19M10 12v10M18 12v10" stroke="currentColor" stroke-width="2"/></svg><b class="badge" id="nDepot">0</b></button>
+<button class="tb" id="tWell" title="Place a well" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="9.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M14 8.2c2.3 2.8 3.6 4.7 3.6 6.6a3.6 3.6 0 0 1-7.2 0c0-1.9 1.3-3.8 3.6-6.6z" fill="currentColor"/></svg><b class="badge" id="nWell">0</b></button>
+<button class="tb" id="tRound" title="Roundabout: tap a junction (two lanes round where its roads are wide)" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="7.5" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="14" cy="14" r="2.6" fill="currentColor"/><path d="M14 2.5v4M14 21.5v4M2.5 14h4M21.5 14h4" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg><b class="badge" id="nRound">0</b></button>
+<button class="tb" id="tLight" title="Traffic lights: tap a junction" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><rect x="9.5" y="3.5" width="9" height="21" rx="4.5" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="14" cy="9" r="2.1" fill="currentColor"/><circle cx="14" cy="14" r="2.1" fill="currentColor" opacity=".5"/><circle cx="14" cy="19" r="2.1" fill="currentColor"/></svg><b class="badge" id="nLight">0</b></button>
+<button class="tb" id="tMotor" title="Motorway: drag it anywhere, any shape; it rides over houses" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M3 18c4-9 18-9 22 0" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><path d="M8 13v10M20 13v10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><b class="badge" id="nMotor">0</b></button>
+<button class="tb" id="tGrade" title="Grading crew: drag across a dune ridge to cut a way through it" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M2.5 23.5c1.5-3.9 3.7-9.6 6.3-10.1 3.3.7 7.5 6.6 11.7 10.1z" fill="currentColor" opacity=".45"/><path d="M2.5 23.5h23" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M17.6 14.4l5.7-5.7M21.4 6.8l3.7 3.7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path transform="translate(15.4 16.6) rotate(45)" d="M-3.5-3.1h7v3.3c0 2.6-1.8 4.6-3.5 6.1-1.7-1.5-3.5-3.5-3.5-6.1z" fill="currentColor"/></svg><b class="badge" id="nGrade">0</b></button>
+<button class="tb" id="tPlace" title="Place any building (P)" aria-expanded="false" aria-controls="pPlace"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M4.5 13.2L14 5.5l9.5 7.7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 11.5V22h13V11.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M14 13.5v5.5M11.25 16.25h5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><canvas class="tthumb" id="placeThumb" width="64" height="64" aria-hidden="true"></canvas></button>
+<button class="tb" id="tTerrain" title="Paint the land (L)" aria-expanded="false" aria-controls="pTerrain"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M2.5 22l7-9.5 4.6 5.6 3.4-4.1L25.5 22z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="19.5" cy="7.5" r="2.6" fill="currentColor"/></svg><i class="bdot" id="brushDot" aria-hidden="true"></i></button>
+<button class="tb" id="tErase" title="Erase roads (X, or right-drag)"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M8.5 19.5l10.6-10.6M8.5 8.9l10.6 10.6" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg></button>
+<button class="tb" id="tUndo" title="Undo the last road you drew (Ctrl+Z)" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M9.5 10.5H17a5.5 5.5 0 0 1 0 11h-5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="M12.5 6.2L8 10.5l4.5 4.3" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<span class="sep" aria-hidden="true"></span>
+<button class="tb done" id="tDone" title="Done: look around (Esc)"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M7 14.5l4.6 4.6L21.5 9" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</nav>
+<div class="pill lanes" id="lanePick" hidden role="radiogroup" aria-label="Road width">
+<button class="ln" data-k="1" role="radio" aria-checked="true" title="One lane each way: a road tile per tile (Tab switches)"><svg viewBox="0 0 30 22" aria-hidden="true"><rect x="11" y="1.5" width="8" height="19" rx="1.5" fill="currentColor" opacity=".22"/><path d="M15 3.5v3M15 9.5v3M15 15.5v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><b>1</b></button>
+<button class="ln" data-k="2" role="radio" aria-checked="false" title="Two lanes each way: two road tiles per tile (Tab switches)"><svg viewBox="0 0 30 22" aria-hidden="true"><rect x="7" y="1.5" width="16" height="19" rx="1.5" fill="currentColor" opacity=".22"/><path d="M14.2 2.5v17M15.8 2.5v17" stroke="currentColor" stroke-width="1.1"/><path d="M11 3.5v3M11 9.5v3M11 15.5v3M19 3.5v3M19 9.5v3M19 15.5v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><b>2</b></button>
+<button class="ln" data-k="3" role="radio" aria-checked="false" title="Three lanes each way: three road tiles per tile, nearly the whole tile (Tab switches)"><svg viewBox="0 0 30 22" aria-hidden="true"><rect x="3" y="1.5" width="24" height="19" rx="1.5" fill="currentColor" opacity=".22"/><path d="M14.2 2.5v17M15.8 2.5v17" stroke="currentColor" stroke-width="1.1"/><path d="M7 3.5v3M7 9.5v3M7 15.5v3M11 3.5v3M11 9.5v3M11 15.5v3M19 3.5v3M19 9.5v3M19 15.5v3M23 3.5v3M23 9.5v3M23 15.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><b>3</b></button>
+</div>
+<div class="pill zoomg" id="zoom" role="group" aria-label="Zoom">
+<button class="cb" id="bZin" aria-label="Zoom in" title="Zoom in (+, scroll or pinch)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+<button class="cb" id="bZout" aria-label="Zoom out" title="Zoom out (−)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+<button class="cb" id="bView" aria-label="Change the build view" title="Build view: plan, top-down or angled (C)"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 2.5v11M2.5 8h11" stroke="currentColor" stroke-width="1.2"/></svg></button>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<section class="tutc" id="tutCard" hidden aria-labelledby="tutTitle">
+<div class="tutbar" aria-hidden="true"><i id="tutFill"></i></div>
+<div class="tutrow"><p class="tutstep" id="tutStep">Step 1</p><button class="tutskip" id="tutSkip">Skip tutorial</button></div>
+<div class="tutmain" aria-live="polite"><span class="tutcheck" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h3 id="tutTitle"></h3><p id="tutText"></p><p class="tuthow" id="tutHow"></p></div></div>
+<div class="tutgo"><button class="btn" id="tutNext" hidden>Next</button><button class="tutpass" id="tutPass">Skip this step</button></div>
+</section>
+<div class="pill showbar" id="showBar" hidden role="toolbar" aria-label="Showcase">
+<button class="sbb" id="sbTour">Touring</button>
+<span class="sep" aria-hidden="true"></span>
+<div class="chips" id="sbHours" aria-label="Light"></div>
+<span class="sep" aria-hidden="true"></span>
+<button class="sbb" id="sbCode">City code</button>
+<button class="sbb dark" id="sbExit">Done</button>
+</div>
+<div class="pop bottom" id="pPlace" hidden role="dialog" aria-label="Place a building"><div id="placeGroups"></div></div>
+<div class="pop bottom" id="pTerrain" hidden role="dialog" aria-label="Paint the land">
+<h3>Paint the land</h3>
+<div class="pgrid" id="brushGrid"></div>
+<h3>Brush size</h3>
+<div class="chips" id="sizeChips"><button class="chip" data-s="0">Small</button><button class="chip" data-s="1">Medium</button><button class="chip" data-s="2">Large</button></div>
+</div>
+<div class="pop world" id="pWorld" hidden role="dialog" aria-label="World">
+<div class="wrow"><div class="wlab">Era <b id="wEraName"></b></div><div class="chips" id="eraChips"></div></div>
+<div class="wrow"><div class="wlab">Time of day <b id="wHour">06:00</b></div><input class="hour" id="wHourIn" type="range" min="0" max="24" step="0.25" value="9" aria-label="Time of day">
+<label class="tog">The sun moves<input type="checkbox" id="wSun" checked></label></div>
+<div class="wrow"><label class="tog">Families and sites appear on their own<input type="checkbox" id="wGrow" checked></label></div>
+<div class="wrow"><div class="wlab">Weather <b id="wEv">Clear</b></div><div class="chips" id="evChips"></div><label class="tog">Events come on their own<input type="checkbox" id="wEvAuto"></label></div>
+<div class="wrow"><div class="wlab">Desert <b id="wMap"></b></div><div class="chips"><button class="chip" id="wCode">City code</button><button class="chip" id="wMapCopy">Copy map code</button></div></div>
+<button class="wbtn" id="wNew">New world</button>
+<p class="wnote" id="wNewNote">Pick a desert or paste a code. Your sandbox is replaced.</p>
+</div>
+<div id="curtain" aria-hidden="true"></div>
+<div id="driveStick" hidden aria-label="Drive: push up to go, down to brake, left or right to choose the next turn"><div id="driveKnob"></div></div>
+<div class="menu" id="mMenu">
+<div class="menuInner">
+<h1 class="mtitle">Mirage</h1>
+<div class="mbtns" id="mbtns">
+<button class="mbtn primary" id="bPlay"><span class="mi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.6" fill="currentColor"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="mt"><b>New city</b><span id="playInfo">Pick a desert and make camp</span></span></button>
+<button class="mbtn" id="bCreative"><span class="mi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 3.5l1.9 5.1 5.1 1.9-5.1 1.9-1.9 5.1-1.9-5.1-5.1-1.9 5.1-1.9z" fill="currentColor"/><path d="M18.2 14.2l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9z" fill="currentColor"/></svg></span><span class="mt"><b>Creative</b><span id="creativeInfo">Unlimited tools, build anything</span></span></button>
+<button class="mbtn" id="bResume" disabled><span class="mi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.2 12a7.2 7.2 0 1 1-2.1-5.1" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/><path d="M19.6 4.2v4.4h-4.4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="mt"><b>Resume</b><span id="resumeInfo">No saved city yet</span></span></button>
+</div>
+<div class="mlinks"><button class="mlink" id="bCode" title="Open a map or city code">Open a code</button><button class="mlink" id="qPick" title="Graphics quality: Low, High or Ultra">Graphics <span id="qName">High</span></button><button class="mlink" id="bCredits">Credits</button></div>
+</div>
+<p class="mfoot">© 2026 Unethical Group. Mirage™ by Unethical Studios. <span class="mfl"><a href="https://unethicalstudios.com/#terms" target="_blank" rel="noopener">Terms</a> · <a href="https://unethicalstudios.com/#privacy" target="_blank" rel="noopener">Privacy</a> · <a href="https://unethicalstudios.com/#copyright" target="_blank" rel="noopener">Copyright</a></span></p>
+</div>
+<div class="modal" id="mMaps" hidden>
+<div class="card mapcard" role="dialog" aria-labelledby="mapsTitle">
+<p class="eyebrow" id="mapsEyebrow">A new city</p>
+<h2 id="mapsTitle">Choose your desert</h2>
+<div class="maps" id="mapGrid" role="radiogroup" aria-label="Desert"></div>
+<p class="mapblurb" id="mapBlurb"></p>
+<div class="mrow">
+<label class="mlab" for="mapCodeIn" id="mapCodeLab">Map code</label>
+<div class="codebox"><input id="mapCodeIn" class="codein" spellcheck="false" autocomplete="off" autocapitalize="characters" aria-describedby="mapCodeNote"><button class="chip" id="mapShuffle" title="Another desert of the same kind">Shuffle</button></div>
+<p class="wnote" id="mapCodeNote">The same code makes the same desert on any device. Paste a city code here to open that city in the sandbox.</p>
+</div>
+<div class="mrow" id="mapModeRow"><span class="mlab">Pressure</span><div class="chips" id="mapMode"><button class="chip on" data-m="challenge">Challenge</button><button class="chip" data-m="relaxed">Relaxed</button></div><p class="wnote" id="mapModeNote"></p></div>
+<div class="go"><button class="btn" id="mapGo">Make camp</button><button class="btn ghost" id="mapBack">Back</button><span class="best" id="mapMsg"></span></div>
+</div>
+</div>
+<div class="modal" id="mCode" hidden>
+<div class="card" role="dialog" aria-labelledby="codeTitle">
+<p class="eyebrow">Share</p>
+<h2 id="codeTitle">Your city as a code</h2>
+<p class="lede l14" id="codeLede">Paste it into the map picker (Open a code, on the menu) to open this city in the sandbox: look round it, change it, practise on it.</p>
+<div class="maprow"><span class="mlab m0">Desert</span><b id="codeMap"></b><button class="chip" id="copyMap">Copy</button></div>
+<textarea id="codeOut" class="codeout" readonly rows="4" aria-label="City code"></textarea>
+<div class="go"><button class="btn" id="copyCity">Copy city code</button><button class="btn ghost" id="codeDone">Done</button><span class="best" id="codeMsg"></span></div>
+</div>
+</div>
+<div class="modal" id="mCredits" hidden>
+<div class="card credcard" role="dialog" aria-labelledby="credTitle">
+<div class="credhead"><svg class="credmark" viewBox="21 60 198 114" aria-hidden="true"><g fill="currentColor"><rect x="21.5" y="162" width="5" height="10"/><rect x="33.5" y="156" width="5" height="16"/><rect x="45.5" y="160" width="5" height="12"/><rect x="57.5" y="144" width="5" height="28"/><rect x="69.5" y="150" width="5" height="22"/><rect x="81.5" y="122" width="5" height="50"/><rect x="93.5" y="104" width="5" height="68"/><rect x="105.5" y="68" width="5" height="104"/><rect x="117.5" y="94" width="5" height="78"/><rect x="129.5" y="84" width="5" height="88"/><rect x="141.5" y="122" width="5" height="50"/><rect x="153.5" y="110" width="5" height="62"/><rect x="165.5" y="140" width="5" height="32"/><rect x="177.5" y="132" width="5" height="40"/><rect x="189.5" y="152" width="5" height="20"/><rect x="201.5" y="158" width="5" height="14"/><rect x="213.5" y="162" width="5" height="10"/></g></svg><div><p class="eyebrow">Credits</p><h2 id="credTitle">Mirage</h2></div></div>
+<dl class="credrows">
+<div><dt>A game by</dt><dd><a href="https://unethicalstudios.com" target="_blank" rel="noopener">Unethical Studios</a><span>unethicalstudios.com</span></dd></div>
+<div><dt>Dreamt by</dt><dd><b>nchzingo</b></dd></div>
+</dl>
+<p class="cred">Mirage, by Unethical Studios. Dreamt by nchzingo.</p>
+<p class="cred">Designed, directed and tested by people. Built with AI tools.</p>
+<h3 class="credh">Third-party</h3>
+<ul class="credl">
+<li><b>three.js</b> (r158), the 3D engine. MIT License, © 2010–2023 three.js authors.</li>
+<li><b>Outfit</b>, the typeface. SIL Open Font License 1.1, © 2021 The Outfit Project Authors.</li>
+</ul>
+<p class="cred small">Nothing else is borrowed: the deserts, the buildings, the vehicles and the sound are made by Mirage's own code. © 2026 Unethical Group. All rights reserved.</p>
+<p class="cred"><a href="https://unethicalstudios.com" target="_blank" rel="noopener">unethicalstudios.com</a> · <a href="https://unethicalstudios.com/#terms" target="_blank" rel="noopener">Terms</a> · <a href="https://unethicalstudios.com/#privacy" target="_blank" rel="noopener">Privacy</a> · <a href="https://unethicalstudios.com/#copyright" target="_blank" rel="noopener">Copyright</a></p>
+<div class="go"><button class="btn" id="credDone">Done</button></div>
+</div>
+</div>
+<div class="modal" id="mStart" hidden>
+<div class="card" role="dialog" aria-labelledby="startTitle">
+<p class="eyebrow" id="startEyebrow">Nile Valley</p>
+<h1 id="startTitle" class="title">Mirage</h1>
+<p class="lede">Raise a desert camp into a great city. Every era brings new buildings, new vehicles and busier roads.</p>
+<ul class="steps">
+<li><span class="si s1"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M6 22c0-6 6-5 8-8s1-6 8-8" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></span><span><b>Drag roads</b>, eight ways, to the driveways of the oasis, the palm grove and the Hearth; <span id="stepRoads">carry one on over the river and it becomes a bridge</span>. Caravans haul goods, then drive back to park.</span></li>
+<li><span class="si s2"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 22V12l9-6 9 6v10z" fill="currentColor"/></svg></span><span><b>Fed homes grow</b> when you bring them building materials, from tents to towers.</span></li>
+<li><span class="si s3"><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8" fill="none" stroke="currentColor" stroke-width="3"/><path d="M14 9v5l3 2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg></span><span id="stepWait"><b>Homes without water or dates</b> start a countdown. If it runs out, families leave: the home shrinks, or a tent is abandoned.</span></li>
+<li><span class="si s4"><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8" fill="none" stroke="currentColor" stroke-width="3"/><path d="M14 10v8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><b>Sell goods</b> at trade posts. Upkeep is paid every dawn; in debt the city stops growing, and deep in debt families start to leave. The city never ends: see how far it can go.</span></li>
+</ul>
+<div class="ladder" aria-label="Eras"><span class="now">Encampment</span><span>Village</span><span>Town</span><span>City</span><span>Metropolis</span><span>Visionary</span><span>Megacity</span><span>Mirage</span></div>
+<div class="go"><button class="btn" id="bBegin">Make camp</button><span class="best" id="bestStart"></span></div>
+</div>
+</div>
+<div class="modal" id="mTut" hidden>
+<div class="card" role="dialog" aria-labelledby="tutAskTitle">
+<svg class="tutart" viewBox="0 0 392 132" aria-hidden="true"><defs><linearGradient id="tutSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9C3CC"/><stop offset="1" stop-color="#F3E3CB"/></linearGradient><linearGradient id="tutSand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2C49A"/><stop offset="1" stop-color="#D4AD7E"/></linearGradient></defs><rect width="392" height="132" fill="url(#tutSky)"/><circle cx="292" cy="70" r="20" fill="#FFF1D8"/><path d="M0 84c48-14 92-16 138-6s98 12 150-2 74-8 104-2V132H0z" fill="#E9D3B0"/><path d="M0 98c60-14 120-16 182-4s128 12 210-6V132H0z" fill="url(#tutSand)"/><path d="M248 96h42v12h-42z" fill="#C79A6A"/><path d="M252 86h34l4 10h-42z" fill="#B98B5C"/><path d="M28 132c34-22 72-30 118-30 40 0 64 6 86 6" fill="none" stroke="#6B6F73" stroke-width="7" stroke-linecap="round"/><path d="M40 125c30-15 62-21 104-21" fill="none" stroke="#F1E8D6" stroke-width="1.6" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M318 104c10-2 24-2 40 0 14 2 26 2 34 0" fill="none" stroke="#7FA7B0" stroke-width="5" stroke-linecap="round"/></svg>
+<p class="eyebrow">New here?</p>
+<h2 id="tutAskTitle">Take the short tour</h2>
+<p class="lede">A small practice valley with dunes, a river and a plateau, and every tool to try once: roads, bridges, tunnels, ramps, motorways and more. About five minutes. Your new city waits right where it is.</p>
+<div class="go"><button class="btn" id="tutYes">Show me</button><button class="btn ghost" id="tutNo">Not now</button></div>
+</div>
+</div>
+<div class="modal" id="mGift" hidden>
+<div class="card" role="dialog" aria-labelledby="giftTitle">
+<div class="weekart" aria-hidden="true"></div>
+<p class="eyebrow" id="giftDay">A new week</p>
+<h2 id="giftTitle">The caravans bring gifts</h2>
+<div class="bonus" id="giftBonus"></div>
+<div class="choices" id="giftChoices"></div>
+</div>
+</div>
+<div class="modal" id="mEra" hidden>
+<div class="card" role="dialog" aria-labelledby="eraTitle">
+<canvas class="eraart" id="eraArt" width="808" height="220" aria-hidden="true"></canvas>
+<p class="eyebrow" id="eraEyebrow">A new era</p>
+<h2 id="eraTitle">The Village</h2>
+<p class="lede" id="eraStory"></p>
+<ul class="news" id="eraNews"></ul>
+<div class="go"><button class="btn" id="bEra">Onward</button></div>
+</div>
+</div>
+<div class="modal" id="mLedger" hidden>
+<div class="card" role="dialog" aria-labelledby="ledgerTitle">
+<p class="eyebrow">Treasury</p>
+<h2 id="ledgerTitle">Upkeep due at dawn</h2>
+<dl class="ledger" id="ledgerRows"></dl>
+<p class="why" id="ledgerNote"></p>
+<div class="go mt16"><button class="btn" id="bLedger">Got it</button></div>
+</div>
+</div>
+<div class="modal" id="mOver" hidden>
+<div class="card" role="dialog" aria-labelledby="overTitle">
+<p class="eyebrow" id="overDay">Week 1</p>
+<h2 id="overTitle">The city fell apart</h2>
+<p class="why" id="overWhy"></p>
+<dl class="stats4">
+<div><dt>Era reached</dt><dd id="sEra">Encampment</dd></div>
+<div><dt>Peak population</dt><dd id="sPop">0</dd></div>
+<div><dt>Weeks</dt><dd id="sWeeks">0</dd></div>
+<div><dt>Coins earned</dt><dd id="sEarned">0</dd></div>
+</dl>
+<div class="go"><button class="btn" id="bAgain">Rebuild</button><button class="btn ghost" id="bOverMenu">Menu</button><span class="best" id="bestOver"></span></div>
+</div>
+</div>
+<div class="fallback" id="noGL" hidden>Mirage needs WebGL to draw its 3D city, and this browser could not start it.</div>
