@@ -12,7 +12,7 @@ Terms:     https://unethicalstudios.com/#terms
 Privacy:   https://unethicalstudios.com/#privacy
 Copyright: https://unethicalstudios.com/#copyright
 
-Privacy: this site collects nothing. No analytics, no ads, no accounts, no cookies, no requests to any other site.
+Privacy: no ads, no accounts, no cookies, no requests to any other site. Mirage counts anonymous play sessions (a random ID stored in your browser, session length, game version, country). Details: https://unethicalstudios.com/#privacy
 Your cities are saved in your own browser and never leave it.
 
 
