@@ -7,8 +7,8 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Mirage","url":"https://miragegame.io/"},{"@type":"VideoGame","name":"Mirage","url":"https://miragegame.io/","image":"https://miragegame.io/og.jpg","description":"Raise a desert camp into a city that never ends. A calm city builder by Unethical Studios.","genre":"City builder","gamePlatform":"Web browser","applicationCategory":"Game","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Unethical Studios","url":"https://unethicalstudios.com/"}}]}</script>
 
 <link rel="stylesheet" href="./assets/mirage-2af734bb.css">
-<link rel="modulepreload" href="./assets/three-bf8bc302.js">
-<script type="module" src="./assets/mirage-f8fcd474.js"></script>
+<link rel="modulepreload" href="./assets/three-e3948352.js">
+<script type="module" src="./assets/mirage-8c31ba76.js"></script>
 <meta name="description" content="Raise a desert camp into a city that never ends. Mirage is a calm city builder by Unethical Studios that runs in your browser.">
 <meta name="copyright" content="© 2026 Unethical Group. All rights reserved.">
 <meta name="robots" content="index, follow, noai, noimageai">
@@ -93,6 +93,7 @@
 </section>
 <div class="pill showbar" id="showBar" hidden role="toolbar" aria-label="Showcase">
 <button class="sbb" id="sbTour">Touring</button>
+<button class="sbb" id="sbCine" aria-pressed="true" title="Cinematic: the camera gathers way slowly and eases to a stop">Cinematic</button>
 <span class="sep" aria-hidden="true"></span>
 <div class="chips" id="sbHours" aria-label="Light"></div>
 <span class="sep" aria-hidden="true"></span>
@@ -191,10 +192,26 @@
 </div>
 <div class="modal" id="mTut" hidden>
 <div class="card" role="dialog" aria-labelledby="tutAskTitle">
-<svg class="tutart" viewBox="0 0 392 132" aria-hidden="true"><defs><linearGradient id="tutSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9C3CC"/><stop offset="1" stop-color="#F3E3CB"/></linearGradient><linearGradient id="tutSand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2C49A"/><stop offset="1" stop-color="#D4AD7E"/></linearGradient></defs><rect width="392" height="132" fill="url(#tutSky)"/><circle cx="292" cy="70" r="20" fill="#FFF1D8"/><path d="M0 84c48-14 92-16 138-6s98 12 150-2 74-8 104-2V132H0z" fill="#E9D3B0"/><path d="M0 98c60-14 120-16 182-4s128 12 210-6V132H0z" fill="url(#tutSand)"/><path d="M248 96h42v12h-42z" fill="#C79A6A"/><path d="M252 86h34l4 10h-42z" fill="#B98B5C"/><path d="M28 132c34-22 72-30 118-30 40 0 64 6 86 6" fill="none" stroke="#6B6F73" stroke-width="7" stroke-linecap="round"/><path d="M40 125c30-15 62-21 104-21" fill="none" stroke="#F1E8D6" stroke-width="1.6" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M318 104c10-2 24-2 40 0 14 2 26 2 34 0" fill="none" stroke="#7FA7B0" stroke-width="5" stroke-linecap="round"/></svg>
+<svg class="tutart" viewBox="0 0 392 132" aria-hidden="true"><defs><linearGradient id="tutSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9DCE0"/><stop offset=".75" stop-color="#F4E5CF"/></linearGradient><radialGradient id="tutGlow" cx="300" cy="52" r="70" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFF6E4"/><stop offset=".35" stop-color="#FCEBD0" stop-opacity=".7"/><stop offset="1" stop-color="#F4E5CF" stop-opacity="0"/></radialGradient><linearGradient id="tutSand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2C08F"/><stop offset="1" stop-color="#D3A874"/></linearGradient><linearGradient id="tutRiver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A5D2CC"/><stop offset="1" stop-color="#4F8F98"/></linearGradient><linearGradient id="tutRoad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8D857B"/><stop offset="1" stop-color="#6D665E"/></linearGradient><linearGradient id="tutDome" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F7ECDA"/><stop offset="1" stop-color="#D9C19E"/></linearGradient><filter id="tutSoft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
+<rect width="392" height="132" fill="url(#tutSky)"/><rect width="392" height="132" fill="url(#tutGlow)"/><circle cx="300" cy="52" r="13" fill="#FFF8EC"/>
+<path d="M174 86l3-17h70l3 17z" fill="#C98F64"/><path d="M222 69h25l3 17h-24z" fill="#B67C53"/><path d="M177 69h70l-.5 2.5h-69z" fill="#DFAB7E"/><path d="M186 69l2-11h34l2 11z" fill="#C2885D"/><path d="M208 58h14l2 11h-13z" fill="#AE754E"/><path d="M188 58h34l-.4 2.2h-33.2z" fill="#E6B68A"/>
+<path d="M0 80c40-10 92-12 142-4s92 8 132 0 82-12 118-4V132H0z" fill="#EBD6B5"/>
+<path d="M0 93c62-9 122-9 184-3s126 8 208-5V132H0z" fill="#E5C79D"/>
+<path d="M0 101c98-4 252-3 392-6V132H0z" fill="url(#tutSand)"/>
+<path d="M253 88c-4 14-14 28-29 44h86c-14-16-22-30-25-44z" fill="#B9BD82"/>
+<path d="M259 88c-4 14-12 28-25 44h66c-11-16-18-30-21-44z" fill="url(#tutRiver)"/><path d="M262 94c-2 7-6 14-11 21" stroke="#E6F3EF" stroke-width="1.2" stroke-linecap="round" opacity=".7"/><path d="M276 99c1 6 3 11 7 17" stroke="#E6F3EF" stroke-width="1" stroke-linecap="round" opacity=".5"/>
+<g fill="#B48A5E" opacity=".35" filter="url(#tutSoft)"><ellipse cx="47" cy="106" rx="20" ry="3"/><ellipse cx="92" cy="106" rx="13" ry="2.5"/><ellipse cx="153" cy="106" rx="26" ry="3"/><ellipse cx="336" cy="105" rx="18" ry="2.5"/></g>
+<path d="M31 89h32v17H31z" fill="#EEDFC7"/><path d="M47 89h16v17H47z" fill="#E1CDAE"/><path d="M27 91l20-11 20 11z" fill="#BF8F61"/><path d="M47 80l20 11h-3l-17-9z" fill="#A87A50"/><path d="M42 95h10v11H42z" fill="#8F6B49"/>
+<path d="M81 96h22v10H81z" fill="#DCC6A3"/><path d="M92 96h11v10H92z" fill="#CDB38D"/><ellipse cx="92" cy="96" rx="11" ry="2.6" fill="#6FA6AC"/><path d="M83 96V86M101 96V86" stroke="#8F6B49" stroke-width="1.8" stroke-linecap="round"/><path d="M79 87l13-7 13 7z" fill="#BF8F61"/>
+<path d="M134 88h38v18h-38z" fill="#F3E7D3"/><path d="M158 88h14v18h-14z" fill="#E2CFB2"/><path d="M140 88a13 13 0 0 1 26 0z" fill="url(#tutDome)"/><path d="M153 75v-3" stroke="#C9A77C" stroke-width="1.6" stroke-linecap="round"/><path d="M148 106v-7a4 4 0 0 1 8 0v7z" fill="#9C7650"/><circle cx="141" cy="95" r="1.8" fill="#A9845C"/><circle cx="165" cy="95" r="1.8" fill="#94714E"/>
+<path d="M0 108h392v10H0z" fill="url(#tutRoad)"/><path d="M0 108h392" stroke="#A79F94" stroke-width="1"/><path d="M232 118h68v9h-9a25 8 0 0 0-50 0h-9z" fill="#D9C09A"/><path d="M232 118h68v1.6h-68z" fill="#B99B74"/><path d="M241 127a25 8 0 0 1 50 0" fill="none" stroke="#3E6F77" stroke-width="1.4" opacity=".5"/><path d="M232 104.5h68v3.5h-68z" fill="#E4D2B4"/><path d="M232 104.5h68" stroke="#F4E9D6" stroke-width="1"/>
+<path d="M330 106c1-10 0-19-3-27" fill="none" stroke="#8B6A49" stroke-width="2.6" stroke-linecap="round"/><g fill="none" stroke="#6F8B50" stroke-width="3.2" stroke-linecap="round"><path d="M327 79c-5-3-12-2-17 3"/><path d="M327 79c-3-6-9-9-15-8"/><path d="M327 79c1-6 5-10 11-11"/><path d="M327 79c6-2 12 0 15 5"/><path d="M327 79c4 2 6 6 6 11"/></g><circle cx="325" cy="82" r="1.6" fill="#C27A3A"/><circle cx="328" cy="83" r="1.6" fill="#B56E32"/>
+<path d="M350 106c0-7-1-13-3-18" fill="none" stroke="#8B6A49" stroke-width="2.2" stroke-linecap="round"/><g fill="none" stroke="#7D9757" stroke-width="2.6" stroke-linecap="round"><path d="M347 88c-4-2-9-1-12 2"/><path d="M347 88c-1-4-5-7-9-6"/><path d="M347 88c1-4 4-7 8-7"/><path d="M347 88c4-1 8 1 10 4"/></g>
+<path d="M50 113H334" fill="none" stroke="#FFFDF8" stroke-width="4.5" stroke-linecap="round" opacity=".55"/><path d="M50 113H334" fill="none" stroke="#467C82" stroke-width="2" stroke-dasharray="1.5 6" stroke-linecap="round"/>
+<circle cx="340" cy="115" r="9" fill="#2E2014" opacity=".2" filter="url(#tutSoft)"/><circle cx="338" cy="113" r="14" fill="none" stroke="#467C82" stroke-width="1.4" opacity=".35"/><circle cx="338" cy="113" r="8" fill="#FFFDF8" stroke="#467C82" stroke-width="1.6"/></svg>
 <p class="eyebrow">New here?</p>
 <h2 id="tutAskTitle">Take the short tour</h2>
-<p class="lede">A small practice valley with dunes, a river and a plateau, and every tool to try once: roads, bridges, tunnels, ramps, motorways and more. About five minutes. Your new city waits right where it is.</p>
+<p class="lede">One road across a little valley, then into a maze of rock: roads, bridges and tunnels, tried once each. About half a minute. Your new city waits right where it is.</p>
 <div class="go"><button class="btn" id="tutYes">Show me</button><button class="btn ghost" id="tutNo">Not now</button></div>
 </div>
 </div>
