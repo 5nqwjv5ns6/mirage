@@ -1,4 +1,4 @@
-# miragegame.io: search engines welcome; AI crawlers and training bots are not.
+# buildmirage.io: search engines welcome; AI crawlers and training bots are not.
 
 User-agent: GPTBot
 User-agent: CCBot
